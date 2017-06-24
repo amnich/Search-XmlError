@@ -39,7 +39,12 @@ Function Show-XmlError {
         [switch]$Pause
 	
     )
+	BEGIN{
+		#offset check for html tag < or >
+		$offset = 0,-1,1,-2,2,-3,3
+	}
     PROCESS {
+		#if not an exception object then create one from arguments
         if (-not $InputObject) {
             $inputObject = @{
                 lineNumber   = $line
@@ -48,23 +53,32 @@ Function Show-XmlError {
             }
         }
         else {
+			#remove file:///from sourceUri
             $InputFile = $(($InputObject.SourceUri | Select-Object -first 1) -replace "file:///")
         }
-        $file = Get-Content $InputFile -Encoding UTF8
+		try {
+        	$file = Get-Content $InputFile -Encoding UTF8
+		}
+		catch {
+			throw "Error getting content from file $inputFile`n$($error[0] | out-string)"
+		}
+		#loop all errors
         foreach ($row in $inputObject) {
-            $line = $row.lineNumber - 1
+            #line number counted from 0 not 1
+			$line = $row.lineNumber - 1
+			#column number counted from 0 not 1
             $column = $row.LinePosition - 1
-            if (">", "<" -notcontains $FILE[$line].substring($column, 1)) {
-                try {
-                    if (">", "<" -contains $FILE[$line].substring($column - 2, 1)) {
-                        $column = $column - 1
-                    }
-                    elseif (">", "<" -contains $FILE[$line].substring($column + 2, 1)) {
-                        $column = $column + 1
-                    }
-                }
-                catch {}
-            }
+			#try to find nearest xml tag > or < for line break
+            foreach ($i in $offset) {
+				try{
+				    if (">", "<" -contains $file[$line].substring($column + $i, 1)) {
+						$column = $column + $i + 1
+						break
+				    }					
+				}
+				catch{}
+			}
+			#check if not out of bounds
             if ($column -ge 0 -and $line -ge 0) {
                 $column1 = $column - $OffsetLeft
                 if ($column1 -lt 0) {
