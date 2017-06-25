@@ -4,7 +4,7 @@ Validate XML with XSD and if errors found show XML fragment with error message u
 
 Test-Xml - validate a XML file against XSD schema and returns exceptions with message, line and position/column in XML file.
 
-Show-XmlError - shows the XML fragment before and after the error. It accepts input from Test-XML but also accepts manual XML file input with specified line and column number of error.
+Show-XmlError - shows the XML fragment before and after the error. It accepts input from Test-Xml but also manual XML file input with specified line and column number of error.
 
 Example usage:
 
