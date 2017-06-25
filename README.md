@@ -1,6 +1,6 @@
 # Search-XmlError
 
-Validate XML with XSD and if errors found show XML fragment with error message using this two function.
+Validate XML with XSD and if errors found show XML fragment with error message using this two functions.
 
 Test-Xml - validate a XML file against XSD schema and returns exceptions with message, line and position/column in XML file.
 
