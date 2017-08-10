@@ -33,7 +33,7 @@ Function Show-XmlError {
     <Name>Carl Johann GmbH Bonn</Name>
     <Address>Vor den Siebenburgen 123 , Bonn</Address>
     <LookFoo>DDD/11/03/2</LookFoo>
-    <DataWystawienia>2015-03-17</DateOne>
+    <DataOne>2015-03-17</DateOne>
     <DateTwo>2015-03-17</DateTwo>
     <A_0>3627.18</A_0>
     --> The element 'Look' in namespace 'http://xml.foo.bar/' has incomplete content. List
