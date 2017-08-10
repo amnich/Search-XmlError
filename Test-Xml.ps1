@@ -1,4 +1,9 @@
+function Test-Xml {
+    <#
+    .SYNOPSIS
+    Validate a XML file against XSD schema.
 
+    .DESCRIPTION
     Validate a XML file against XSD schema and get back error messages if any errors found.
 
     .PARAMETER XmlFile
