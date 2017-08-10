@@ -26,7 +26,7 @@ Function Show-XmlError {
 
     .EXAMPLE
     Test-Xml -XmlFile C:\my.xml -XsdFile C:\schema.xsd | Show-XmlError
-
+    ======= Error in Line 8 Column 414720  =============
     <Look typ="G">
     <LookOne>1453</LookOne>
     <Number>.</Number>
