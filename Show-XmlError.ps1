@@ -68,6 +68,7 @@ Function Show-XmlError {
     PROCESS {
         #if not an exception object then create one from arguments
         if (-not $InputObject) {
+            write-verbose "Create inputObject from custom"
             $inputObject = @{
                 lineNumber   = $line
                 LinePosition = $column
@@ -75,9 +76,11 @@ Function Show-XmlError {
             }
         } else {
             #remove file:///from sourceUri
+            Write-Verbose "Set XmlFile path"
             $xmlFile = $(($InputObject.SourceUri | Select-Object -first 1) -replace "file:///")
         }
         try {
+            Write-Verbose "Import xml file $xmlFile"
             $file = Get-Content $xmlFile -Encoding UTF8
         } catch {
             throw "Error getting content from file $xmlFile`n$($error[0] | out-string)"
@@ -104,11 +107,21 @@ Function Show-XmlError {
                     $column1 = 0
                 }
                 $column2 = $OffsetLeft - 1
-                "`n=================================`n"
-                #write-Host "$($row.Message)" -ForegroundColor DarkRed -BackgroundColor White
+				if ($column2 -gt $file[$line].length){
+					$column2 = $file[$line].length - 1
+				}
+				$tmpOffsetRight = $OffsetRight				
+				if ($OffsetRight -gt ($file[$line].length - ($column1 + $column2))){
+					$tmpOffsetRight = $file[$line].length - ($column1 + $column2)
+				}
+				elseif ($OffsetRight -gt $file[$line].length){
+					$tmpOffsetRight = $file[$line].length - 1
+				}					
+					
+                "`n======= Error in Line $($row.lineNumber) Column $($row.LinePosition)  =============`n"
                 "$($file[$line].substring($column1,$column2))" -replace "><", ">`n<"
                 Write-Host "  --> $($row.Message)  <--" -BackgroundColor Red -ForegroundColor White
-                "$($file[$line].substring($column1+$column2,$OffsetRight))..." -replace "><", ">`n<"
+                "$($file[$line].substring($column1+$column2,$tmpOffsetRight))..." -replace "><", ">`n<"
             }
             if ($Pause) {
                 pause
