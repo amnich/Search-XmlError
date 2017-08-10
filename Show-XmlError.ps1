@@ -23,6 +23,26 @@ Function Show-XmlError {
 
     .PARAMETER Pause
     Pause after each error fragment
+
+    .EXAMPLE
+    Test-Xml -XmlFile C:\my.xml -XsdFile C:\schema.xsd | Show-XmlError
+
+    <Look typ="G">
+    <LookOne>1453</LookOne>
+    <Number>.</Number>
+    <Name>Carl Johann GmbH Bonn</Name>
+    <Address>Vor den Siebenburgen 123 , Bonn</Address>
+    <LookFoo>DDD/11/03/2</LookFoo>
+    <DataWystawienia>2015-03-17</DateOne>
+    <DateTwo>2015-03-17</DateTwo>
+    <A_0>3627.18</A_0>
+    --> The element 'Look' in namespace 'http://xml.foo.bar/' has incomplete content. List
+        of possible elements expected: 'A_1' in namespace 'http://xml.foo.bar/'..  <--
+    </Look>
+    <Look typ="G">
+    <LookOne>1454</LookOne>
+    <Number>.</Number...
+
     #>
     [CmdletBinding(DefaultParametersetName = 'custom')]
     param(
