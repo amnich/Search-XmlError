@@ -63,6 +63,7 @@ function Test-Xml {
     PROCESS {
         #delete temporary file
         Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
+        out-file -Encoding utf8 $tempFile
         write-verbose "xml file: $xmlFile"
         write-verbose "xsd file: $xsdFile"
         #get full filename of XML file
@@ -73,7 +74,7 @@ function Test-Xml {
         $readerSettings.ValidationFlags = [System.Xml.Schema.XmlSchemaValidationFlags]::ProcessIdentityConstraints -bor
         [System.Xml.Schema.XmlSchemaValidationFlags]::ProcessSchemaLocation -bor
         [System.Xml.Schema.XmlSchemaValidationFlags]::ReportValidationWarnings
-        $readerSettings.Schemas.Add($Namespace, $xsdFile) | Out-Null
+        $readerSettings.Schemas.Add($Namespace, ((Get-Item $xsdFile).FullName -replace "^","file:///" -replace "\\","/")) | Out-Null
         $readerSettings.add_ValidationEventHandler(
             {
                 Write-Debug $_.exception
